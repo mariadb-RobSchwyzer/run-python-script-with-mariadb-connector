@@ -1,34 +1,38 @@
-# Connector-Python
-Uses a CentOS 7 base image to deploy a container with MariaDB Connector/Python installed and ready to use.
+# Run Python Script with MariaDB Connector
+Uses a CentOS 7 base image to deploy a container with MariaDB Connector/Python installed. Immediately runs file `script.py` and exits on completion.
 
 # Dependencies
 
 * [Docker Engine](https://docs.docker.com/engine/install/)
-* [`docker-compose`](https://docs.docker.com/compose/install/)
 
 # Install and Run
-Open a terminal with `docker-compose` installed, change directory into where you downloaded/extracted the code, then run-
+Download/clone/extract the code to a directory. Open a terminal and change into the directory the code is in. Then-
 
 ```
-docker-compose up;
+docker build -t python-script . ;
+docker run python-script ;
 ```
 
-# Run your Code
-Add your Python code files to the `my_python_code` directory. These will appear at `/root/my_python_code/` in the container. Note the repository comes with `test.py` by default.
-
-Get a shell to the container with-
+# View Logs
 
 ```
-docker exec -it connector-python bash
+docker logs python-script ;
 ```
 
-You can then run your Python code like-
+# Included Code
+A default `script.py` comes with this repository. Expect the following output when using it without any modifications-
 
 ```
-python3 /root/my_python_code/test.py
+Error connecting to MariaDB Platform: Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)
 ```
 
-Where `/root/my_python_code/test.py` is replaced with the path to your Python code file.
+To test connectivity to your MariaDB server, edit `Dockerfile` and change `ENV` lines to the correct MariaDB user, password, IPv4 address or FQDN, and port for your remote MariaDB server. You can then rebuild this container and see if the output of the test script changes.
+
+# Use Your Script
+Move the existing `script.py` and then copy (or move) the Python script you want to run to `script.py`. Then rebuild the image and run as normal.
+
+## Note on `ENV`
+The included `script.py` is coded to pull data from `ENV`. This functionality is not inherent though. If you would like your Python script to support this, please review the source code of the included `script.py` and adapt it for your needs.
 
 # Connecting to MariaDB
 The container only provides connector infrastructure, it does not provide a running MariaDB server. Reference [Connector/Python documentation](https://mariadb.com/docs/appdev/connector-python/#opening-a-connection) to learn how to specify parameters to open a connection to a remote MariaDB server.
