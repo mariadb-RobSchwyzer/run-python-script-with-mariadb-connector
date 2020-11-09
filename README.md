@@ -34,5 +34,8 @@ Move the existing `script.py` and then copy (or move) the Python script you want
 ## Note on `ENV`
 The included `script.py` is coded to pull data from `ENV`. This functionality is not inherent though. If you would like your Python script to support this, please review the source code of the included `script.py` and adapt it for your needs.
 
+## Note on Secrets
+The included `script.py` checks `/run/secrets/mariadb_pass` for a file. If one exists at that location, it will use the content of that file for password instead of the `ENV` variable. In practice, this can take advantage of [Docker Secrets](https://docs.docker.com/engine/swarm/secrets/) or a mounted volume. This provides a basic demonstration of how you can more securely pass a password into the container.
+
 # Connecting to MariaDB
 The container only provides connector infrastructure, it does not provide a running MariaDB server. Reference [Connector/Python documentation](https://mariadb.com/docs/appdev/connector-python/#opening-a-connection) to learn how to specify parameters to open a connection to a remote MariaDB server.
